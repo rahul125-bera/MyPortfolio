@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rahul Bera - Portfolio | 2nd Year BCA Student & Aspiring Web Developer</title>
+  <meta name="description" content="Personal Portfolio of Rahul Bera, 2nd Year BCA Student at Swami Vivekananda University (SVU), Barrackpore. Aspiring Web Developer and Software Engineer." />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React & ReactDOM (Production UMD) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel Standalone for JSX in browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Lucide Icons Vanilla CDN (for fallback or direct icons) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      scroll-behavior: smooth;
+    }
+    code, pre, .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+    @keyframes scaleUp {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-scaleUp {
+      animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+  </style>
+</head>
+<body class="bg-[#020617] text-slate-100 selection:bg-sky-500/30 selection:text-sky-200">
+  <div id="root"></div>
+
+  <!-- Main React App Script in JSX -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    /* --- Inline SVG Icons to make the file 100% standalone without build step --- */
+    const Icon = ({ name, className = "w-4 h-4" }) => {
+      const icons = {
+        menu: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>,
+        x: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>,
+        sun: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"/><path strokeLinecap="round" strokeLinejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>,
+        moon: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>,
+        fileText: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>,
+        code2: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>,
+        sparkles: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>,
+        arrowRight: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>,
+        arrowUp: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>,
+        arrowUpRight: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7V17"/></svg>,
+        mail: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
+        github: <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>,
+        linkedin: <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>,
+        instagram: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>,
+        terminal: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>,
+        play: <svg className={className} fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>,
+        check: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
+        copy: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>,
+        mapPin: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>,
+        graduationCap: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>,
+        cpu: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>,
+        bookOpen: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>,
+        checkCircle2: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4"/></svg>,
+        compass: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>,
+        eye: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>,
+        folderGit2: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M9 20H4a2 2 0 01-2-2V5a2 2 0 012-2h3.9a2 2 0 011.69.9l.81 1.2a2 2 0 001.67.9H20a2 2 0 012 2v5"/><circle cx="13" cy="12" r="2"/><path d="M18 19c-2.8 0-5-2.2-5-5v8"/><circle cx="18" cy="19" r="2"/></svg>,
+        calendar: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
+        clock: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+        send: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
+        printer: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>,
+        flame: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 3.5z"/></svg>,
+        alertCircle: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>,
+        externalLink: <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      };
+      return icons[name] || <span className="inline-block w-4 h-4">•</span>;
+    };
+
+    /* --- Data Constants --- */
+    const PERSONAL_INFO = {
+      name: 'Rahul Bera',
+      role: '2nd Year BCA Student | Aspiring Web Developer',
+      university: 'Swami Vivekananda University (SVU), Barrackpore',
+      degree: 'Bachelor of Computer Applications (BCA)',
+      year: '2nd Year (2024 – 2027)',
+      email: 'berarahul125@gmail.com',
+      location: 'Barrackpore, Kolkata, West Bengal, India',
+      availability: 'Open for Internships, College Projects & Freelance',
+      tagline: "I'm a BCA student passionate about building modern websites, learning new technologies, and turning ideas into useful digital experiences.",
+      github: 'https://github.com/rahulbera-dev',
+      linkedin: 'https://linkedin.com/in/rahul-bera',
+      instagram: 'https://instagram.com/rahulbera.dev',
+    };
+
+    const CODE_SNIPPETS = {
+      react: `// Rahul Bera - Aspiring Web Developer
+const Developer = {
+  name: "Rahul Bera",
+  education: "BCA 2nd Year @ SVU Barrackpore",
+  passion: ["Modern Web Development", "Problem Solving"],
+  primaryStack: ["HTML5", "CSS3", "JavaScript", "C++", "Python"],
+  status: "Ready for Internships & Projects 🚀",
+  buildUsefulThings: () => "Writing clean, responsive and user-friendly code."
+};`,
+      cpp: `// C++ Data Structures & Algorithms Practice
+#include <iostream>
+#include <vector>
+
+class StudentDeveloper {
+public:
+    std::string name = "Rahul Bera";
+    std::string college = "SVU Barrackpore";
+    int year = 2;
+    void displayFocus() {
+        std::cout << "Learning DSA, OOP concepts, and algorithmic thinking." << std::endl;
+    }
+};`,
+      python: `# Python Automation & Scripting
+def solve_problem(passion, practice_hours):
+    skills = ["Data Handling", "Scripting", "Logic Building"]
+    growth = passion * practice_hours
+    return {
+        "developer": "Rahul Bera",
+        "momentum": "Always building & leveling up!",
+        "skills_in_progress": skills
+    }`,
+      styles: `/* Modern Responsive CSS Design */
+.developer-profile {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  background: #020617;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 2rem;
+}`
+    };
+
+    const SKILLS_DATA = [
+      {
+        name: 'HTML',
+        category: 'frontend',
+        level: 88,
+        experienceLabel: 'Proficient',
+        icon: 'code2',
+        description: 'Semantic HTML5 structure, clean document outlining, forms, SEO fundamentals, and web accessibility (a11y).',
+        tags: ['HTML5', 'Semantic Tags', 'Forms & Inputs', 'Accessibility'],
+      },
+      {
+        name: 'CSS',
+        category: 'frontend',
+        level: 84,
+        experienceLabel: 'Proficient',
+        icon: 'sparkles',
+        description: 'Modern CSS styling, Flexbox, CSS Grid layouts, Tailwind CSS utility architecture, transitions, and animations.',
+        tags: ['CSS3', 'Tailwind CSS', 'Flexbox', 'CSS Grid', 'Keyframe Animations'],
+      },
+      {
+        name: 'JavaScript',
+        category: 'frontend',
+        level: 78,
+        experienceLabel: 'Intermediate',
+        icon: 'fileText',
+        description: 'Core ES6+ syntax, DOM manipulation, asynchronous programming with Fetch/Promises, event listeners, and modular JS.',
+        tags: ['ES6+', 'DOM Manipulation', 'Async / Fetch', 'JSON Handling', 'Events'],
+      },
+      {
+        name: 'C++',
+        category: 'programming',
+        level: 75,
+        experienceLabel: 'Intermediate',
+        icon: 'cpu',
+        description: 'Object-Oriented Programming (OOP), memory management pointers, basic STL containers, searching/sorting algorithms.',
+        tags: ['OOP Concepts', 'Classes & Objects', 'Pointers', 'STL Basics', 'Algorithms'],
+      },
+      {
+        name: 'Python',
+        category: 'programming',
+        level: 70,
+        experienceLabel: 'Intermediate',
+        icon: 'terminal',
+        description: 'Core Python syntax, list/dictionary comprehensions, file I/O operations, scripting, and introductory data manipulation.',
+        tags: ['Python 3', 'Scripting', 'Logic Building', 'File I/O', 'Data Structures'],
+      },
+      {
+        name: 'Git & GitHub',
+        category: 'tools',
+        level: 80,
+        experienceLabel: 'Proficient',
+        icon: 'folderGit2',
+        description: 'Version control workflows, commit etiquette, branching, merging, remote repository management, and GitHub hosting.',
+        tags: ['Version Control', 'Branching', 'GitHub Workflow', 'Markdown'],
+      },
+      {
+        name: 'Responsive Web Design',
+        category: 'design',
+        level: 85,
+        experienceLabel: 'Proficient',
+        icon: 'compass',
+        description: 'Mobile-first development, dynamic fluid typography, viewport media queries, and multi-device usability testing.',
+        tags: ['Mobile First', 'Media Queries', 'Adaptive UI', 'Cross-Browser'],
+      },
+      {
+        name: 'Basic UI/UX',
+        category: 'design',
+        level: 72,
+        experienceLabel: 'Intermediate',
+        icon: 'eye',
+        description: 'User-centric visual hierarchy, spacing math, color harmony, wireframing in Figma, and clean typography pairing.',
+        tags: ['Figma Basics', 'Wireframing', 'Color Harmony', 'Visual Hierarchy'],
+      },
+    ];
+
+    const CURRENTLY_LEARNING = [
+      { name: 'React 19 & Components', desc: 'Hooks, state management, and component architecture', tag: 'Web Framework' },
+      { name: 'Data Structures in C++', desc: 'Linked lists, stacks, queues, and tree traversal', tag: 'Core CS' },
+      { name: 'Backend & REST APIs', desc: 'Understanding client-server requests and Node.js basics', tag: 'Full Stack' },
+      { name: 'Database Fundamentals', desc: 'SQL queries, relational schema design, and normalization', tag: 'DBMS' },
+    ];
+
+    const PROJECTS_DATA = [
+      {
+        id: 'portfolio',
+        title: 'Personal Developer Portfolio',
+        subtitle: 'Modern, Responsive Student Showcase',
+        description: 'A clean, high-performance portfolio website built with modern frontend tools to present academic milestones, projects, and programming skills to recruiters and peers.',
+        category: 'web',
+        categoryLabel: 'Web Application',
+        badge: 'Featured',
+        technologies: ['React 19', 'Tailwind CSS', 'JavaScript ES6+', 'Lucide Icons'],
+        features: [
+          'Interactive dark and light mode theme toggle with persistent state',
+          'Live code terminal widget with interactive syntax-highlighted tabs',
+          'Smooth scroll progress bar, active navigation spy, and animated transitions',
+          'Responsive project showcase with live interactive detail modals and contact form validation',
+        ],
+        githubUrl: 'https://github.com/rahulbera-dev/personal-portfolio',
+        demoUrl: '#',
+        codeSnippet: {
+          language: 'jsx',
+          code: `export default function HeroSection() {
+  return (
+    <div className="flex flex-col items-center">
+      <h1>Rahul Bera</h1>
+      <p>2nd Year BCA Student | Aspiring Web Developer</p>
+    </div>
+  );
+}`
+        }
+      },
+      {
+        id: 'ecommerce-shoes',
+        title: 'SoleSprint E-commerce Shoe Store',
+        subtitle: 'Interactive Footwear Store & Cart Experience',
+        description: 'A modern e-commerce web interface for an athletic and lifestyle footwear brand featuring responsive product filtering, dynamic cart drawer, size selection, and realistic checkout flow.',
+        category: 'web',
+        categoryLabel: 'Web Development',
+        technologies: ['JavaScript ES6', 'HTML5', 'CSS3', 'LocalStorage', 'Responsive UI'],
+        features: [
+          'Category and price range product filters with instant search query matching',
+          'Interactive shopping cart with item quantity updates and subtotal calculation',
+          'Product modal with high-resolution image gallery and shoe size picker',
+          'Persisted cart items using browser localStorage for seamless user sessions',
+        ],
+        githubUrl: 'https://github.com/rahulbera-dev/solesprint-ecommerce-shoes',
+        demoUrl: 'https://github.com/rahulbera-dev/solesprint-ecommerce-shoes',
+        codeSnippet: {
+          language: 'javascript',
+          code: `function updateCartTotal(cartItems) {
+  return cartItems.reduce((total, item) => {
+    return total + (item.price * item.quantity);
+  }, 0);
+}`
+        }
+      },
+      {
+        id: 'student-management',
+        title: 'Student Management System',
+        subtitle: 'Academic Records & Attendance Tracker',
+        description: 'A practical web application created to streamline student record administration, GPA calculations, attendance percentage tracking, and grade reporting for college classrooms.',
+        category: 'web',
+        categoryLabel: 'Web Application',
+        technologies: ['JavaScript', 'HTML5', 'CSS3 / Bootstrap', 'CRUD Logic', 'Data Export'],
+        features: [
+          'Complete CRUD operations: Add, view, edit, and delete student academic records',
+          'Automated SGPA/CGPA and attendance percentage calculator with colored threshold warnings',
+          'Search and filter students by semester, roll number, or academic standing',
+          'Export student summary sheets to printable formats and JSON backups',
+        ],
+        githubUrl: 'https://github.com/rahulbera-dev/student-management-system',
+        demoUrl: 'https://github.com/rahulbera-dev/student-management-system',
+        codeSnippet: {
+          language: 'javascript',
+          code: `class StudentRecord {
+  constructor(rollNo, name, semester, marks) {
+    this.rollNo = rollNo;
+    this.name = name;
+    this.semester = semester;
+    this.marks = marks;
+  }
+  calculateGPA() {
+    const total = this.marks.reduce((a, b) => a + b, 0);
+    return (total / this.marks.length) / 9.5;
+  }
+}`
+        }
+      },
+      {
+        id: 'cpp-projects',
+        title: 'C++ Systems & Algorithmic Projects',
+        subtitle: 'Banking Console & Data Structures Suite',
+        description: 'A curated collection of modular C++ applications built during BCA coursework, featuring an interactive console Banking Management System, File I/O transaction logger, and custom Data Structures.',
+        category: 'cpp',
+        categoryLabel: 'C++ Programming',
+        technologies: ['C++', 'OOP Architecture', 'File Handling (fstream)', 'Data Structures', 'STL'],
+        features: [
+          'Account management with deposit, withdrawal, interest calculation, and PIN validation',
+          'Persistent ledger storage using binary file input/output streams (fstream)',
+          'Custom implementations of Singly Linked Lists, Stacks, and Queues with memory safety',
+          'Binary Search and QuickSort algorithmic benchmarks with user test datasets',
+        ],
+        githubUrl: 'https://github.com/rahulbera-dev/cpp-programming-projects',
+        demoUrl: 'https://github.com/rahulbera-dev/cpp-programming-projects',
+        codeSnippet: {
+          language: 'cpp',
+          code: `void BankAccount::withdraw(double amount) {
+    if (amount > 0 && amount <= balance) {
+        balance -= amount;
+        logTransaction("WITHDRAWAL", amount);
+        std::cout << "Transaction successful. New balance: $" << balance << std::endl;
+    }
+}`
+        }
+      },
+      {
+        id: 'excel-data-analysis',
+        title: 'Excel Academic & Sales Data Analysis',
+        subtitle: 'Interactive Pivot Dashboards & Statistical Modeling',
+        description: 'A data-driven analytics project examining academic test metrics and retail sales data using advanced Microsoft Excel formulas, Pivot Tables, conditional formatting, and interactive KPI charts.',
+        category: 'data',
+        categoryLabel: 'Data Analysis',
+        technologies: ['Microsoft Excel', 'Data Analysis', 'Pivot Tables & Slicers', 'VLOOKUP / XLOOKUP', 'KPI Charts'],
+        features: [
+          'Dynamic Pivot Tables connected to interactive slicers for instant category filtering',
+          'Advanced lookup functions (XLOOKUP, INDEX/MATCH) and multi-conditional logic (COUNTIFS/SUMIFS)',
+          'Student academic grade distribution curves and trend variance charts',
+          'Summary executive dashboard highlighting top performers, averages, and statistical percentiles',
+        ],
+        githubUrl: 'https://github.com/rahulbera-dev/excel-data-analysis-project',
+        demoUrl: 'https://github.com/rahulbera-dev/excel-data-analysis-project',
+        codeSnippet: {
+          language: 'excel',
+          code: `=LET(
+  StudentScores, FILTER(Table1[Marks], Table1[Semester]="Sem 3"),
+  AverageScore, AVERAGE(StudentScores),
+  Grade, IF(AverageScore >= 80, "A+", IF(AverageScore >= 65, "A", "B"))
+)`
+        }
+      },
+    ];
+
+    const EDUCATION_DATA = [
+      {
+        degree: 'Bachelor of Computer Applications (BCA)',
+        institution: 'Swami Vivekananda University (SVU)',
+        location: 'Barrackpore, Kolkata, West Bengal',
+        period: '2024 – Present (2nd Year)',
+        status: 'In Progress (Expected: 2027)',
+        description: 'Undergraduate degree focused on computer science fundamentals, software engineering, web application development, database management systems, and programming languages.',
+        highlights: [
+          'Maintaining strong academic performance with focused study on core computing concepts',
+          'Active participant in coding labs, computer programming practicals, and peer technical discussions',
+          'Applying classroom theoretical computer science to hands-on web and programming projects',
+        ],
+        coursework: [
+          'Data Structures & Algorithms',
+          'Object-Oriented Programming with C++',
+          'Web Technologies & Internet Programming',
+          'Database Management Systems (DBMS)',
+          'Computer Organization & Architecture',
+          'Discrete Mathematics & Statistics',
+          'Operating Systems Fundamentals',
+          'Software Engineering Principles'
+        ],
+      },
+      {
+        degree: 'Higher Secondary Education (10+2)',
+        institution: 'West Bengal Council of Higher Secondary Education',
+        location: 'West Bengal, India',
+        period: 'Completed (2022 – 2024)',
+        status: 'Completed',
+        description: 'Completed higher secondary education with a rigorous focus on Mathematics, Physics, and Computer Science fundamentals.',
+        highlights: [
+          'Built a strong foundation in logical reasoning, mathematical concepts, and introductory computing',
+          'Discovered passion for software development and chose to pursue BCA for undergraduate studies',
+        ],
+        coursework: ['Computer Science', 'Mathematics', 'Physics', 'English'],
+      },
+    ];
+
+    const LEARNING_ACHIEVEMENTS = [
+      {
+        title: '100+ Coding Problems Practiced',
+        category: 'Problem Solving',
+        description: 'Practicing algorithmic problem solving in C++ and Python, focusing on arrays, strings, basic recursion, and searching/sorting logic.',
+        metric: '100+ Problems',
+        icon: 'terminal',
+        date: 'Ongoing Routine',
+      },
+      {
+        title: '10+ Web Projects & Practice Exercises',
+        category: 'Frontend Development',
+        description: 'Designed and coded multiple responsive web templates, calculator utilities, interactive landing pages, and JavaScript mini-applications.',
+        metric: '10+ Mini Projects',
+        icon: 'compass',
+        date: '2024 - 2026',
+      },
+      {
+        title: 'Active Lab Group Contributor at SVU',
+        category: 'Academic & Collaboration',
+        description: 'Regularly leading lab assignments, assisting batchmates with C++ debugging and HTML/CSS web layout implementations during practicals.',
+        metric: 'Lab Contributor',
+        icon: 'graduationCap',
+        date: 'SVU Barrackpore',
+      },
+      {
+        title: 'Continuous Self-Directed Learning',
+        category: 'Self-Improvement',
+        description: 'Dedicates 15+ hours weekly outside university lectures to study modern developer roadmaps, documentation, and web standards.',
+        metric: '15+ hrs/week',
+        icon: 'bookOpen',
+        date: 'Daily Practice',
+      },
+      {
+        title: 'Clean Git & Version Control Practice',
+        category: 'Developer Workflow',
+        description: 'Consistently using Git for version control across personal projects, writing clear commit histories, and managing repositories on GitHub.',
+        metric: 'Daily Commits',
+        icon: 'folderGit2',
+        date: 'GitHub Practice',
+      },
+    ];
+
+    const NAV_ITEMS = [
+      { id: 'hero', label: 'Home', href: '#hero' },
+      { id: 'about', label: 'About', href: '#about' },
+      { id: 'skills', label: 'Skills', href: '#skills' },
+      { id: 'projects', label: 'Projects', href: '#projects' },
+      { id: 'education', label: 'Education', href: '#education' },
+      { id: 'learning', label: 'Learning', href: '#learning' },
+      { id: 'contact', label: 'Contact', href: '#contact' },
+    ];
+
+    /* ==========================================================================
+       MAIN REACT APPLICATION COMPONENT
+       ========================================================================== */
+    function App() {
+      const [darkMode, setDarkMode] = useState(true);
+      const [activeSection, setActiveSection] = useState('hero');
+      const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+      const [scrollProgress, setScrollProgress] = useState(0);
+      const [showBackToTop, setShowBackToTop] = useState(false);
+      
+      // Hero Terminal State
+      const [activeTab, setActiveTab] = useState('react');
+      const [isRunning, setIsRunning] = useState(false);
+      const [consoleOutput, setConsoleOutput] = useState(null);
+      const [copiedEmail, setCopiedEmail] = useState(false);
+
+      // Projects Filter & Modal State
+      const [selectedProjectCategory, setSelectedProjectCategory] = useState('all');
+      const [selectedSkillCategory, setSelectedSkillCategory] = useState('all');
+      const [activeProjectModal, setActiveProjectModal] = useState(null);
+      const [projectModalTab, setProjectModalTab] = useState('overview');
+      const [simOutput, setSimOutput] = useState('');
+      
+      // Resume Modal State
+      const [resumeModalOpen, setResumeModalOpen] = useState(false);
+
+      // Contact Form State
+      const [contactForm, setContactForm] = useState({ name: '', email: '', subject: '', message: '' });
+      const [contactErrors, setContactErrors] = useState({});
+      const [contactSuccess, setContactSuccess] = useState(false);
+      const [contactSubmitting, setContactSubmitting] = useState(false);
+
+      // Scroll Spy & Progress effect
+      useEffect(() => {
+        const handleScroll = () => {
+          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+          if (totalHeight > 0) {
+            setScrollProgress(Math.min(100, Math.max(0, (window.scrollY / totalHeight) * 100)));
+          }
+          setShowBackToTop(window.scrollY > 350);
+
+          const scrollPosition = window.scrollY + 200;
+          for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
+            const el = document.getElementById(NAV_ITEMS[i].id);
+            if (el && el.offsetTop <= scrollPosition) {
+              setActiveSection(NAV_ITEMS[i].id);
+              break;
+            }
+          }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
+      const handleNavClick = (href) => {
+        setMobileMenuOpen(false);
+        const target = document.querySelector(href);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      };
+
+      const handleCopyEmail = () => {
+        navigator.clipboard.writeText(PERSONAL_INFO.email);
+        setCopiedEmail(true);
+        setTimeout(() => setCopiedEmail(false), 2000);
+      };
+
+      const handleRunCode = () => {
+        setIsRunning(true);
+        setConsoleOutput(null);
+        setTimeout(() => {
+          setIsRunning(false);
+          if (activeTab === 'react') setConsoleOutput('✓ Component Rendered: Rahul Bera | Web Developer ready for internships!');
+          else if (activeTab === 'cpp') setConsoleOutput('✓ Process exited code 0: DSA & OOP concepts initialized successfully.');
+          else if (activeTab === 'python') setConsoleOutput('✓ Output: {"developer": "Rahul Bera", "momentum": "Always building & leveling up!"}');
+          else setConsoleOutput('✓ CSS Styles applied: Responsive modern layout with sky gradient accents.');
+        }, 450);
+      };
+
+      const handleContactSubmit = (e) => {
+        e.preventDefault();
+        const errors = {};
+        if (!contactForm.name.trim()) errors.name = 'Please enter your name.';
+        if (!contactForm.email.trim()) errors.email = 'Please enter your email.';
+        else if (!/\S+@\S+\.\S+/.test(contactForm.email)) errors.email = 'Please enter a valid email address.';
+        if (!contactForm.subject.trim()) errors.subject = 'Please enter a subject.';
+        if (!contactForm.message.trim() || contactForm.message.trim().length < 10) errors.message = 'Message must be at least 10 characters.';
+
+        if (Object.keys(errors).length > 0) {
+          setContactErrors(errors);
+          return;
+        }
+
+        setContactErrors({});
+        setContactSubmitting(true);
+        setTimeout(() => {
+          setContactSubmitting(false);
+          setContactSuccess(true);
+          setContactForm({ name: '', email: '', subject: '', message: '' });
+          setTimeout(() => setContactSuccess(false), 6000);
+        }, 600);
+      };
+
+      // Filtered Projects & Skills
+      const filteredProjects = selectedProjectCategory === 'all'
+        ? PROJECTS_DATA
+        : PROJECTS_DATA.filter((p) => p.category === selectedProjectCategory);
+
+      const filteredSkills = selectedSkillCategory === 'all'
+        ? SKILLS_DATA
+        : SKILLS_DATA.filter((s) => s.category === selectedSkillCategory);
+
+      const tabLabels = {
+        react: { label: 'Developer.jsx', icon: '⚛️', lang: 'JSX' },
+        cpp: { label: 'student.cpp', icon: '⚙️', lang: 'CPP' },
+        python: { label: 'growth.py', icon: '🐍', lang: 'PYTHON' },
+        styles: { label: 'theme.css', icon: '🎨', lang: 'CSS' },
+      };
+
+      return (
+        <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'bg-[#020617] text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
+          
+          {/* Scroll Progress Bar */}
+          <div className="fixed top-0 left-0 right-0 h-[3px] bg-transparent z-50 pointer-events-none">
+            <div className="h-full bg-gradient-to-r from-sky-400 via-sky-500 to-blue-600 transition-all duration-75 shadow-[0_0_10px_rgba(56,189,248,0.7)]" style={{ width: `${scrollProgress}%` }} />
+          </div>
+
+          {/* Floating Navigation Header */}
+          <header className="fixed top-0 left-0 right-0 z-40 pt-3 sm:pt-4 px-4 sm:px-6 lg:px-8 pointer-events-none">
+            <div className="max-w-7xl mx-auto pointer-events-auto">
+              <nav className={`flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border shadow-xl transition-all ${
+                darkMode ? 'bg-slate-900/60 backdrop-blur-xl border-slate-800 shadow-black/30 text-slate-200' : 'bg-white/90 backdrop-blur-xl border-slate-200 shadow-slate-200/50 text-slate-800'
+              }`}>
+                <a href="#hero" onClick={(e) => { e.preventDefault(); handleNavClick('#hero'); }} className="flex items-center gap-3 group">
+                  <div className="text-xl font-extrabold bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent tracking-tight group-hover:scale-105 transition-transform">
+                    RB.
+                  </div>
+                  <div className="hidden sm:flex flex-col">
+                    <span className="font-bold text-sm tracking-tight text-slate-100 flex items-center gap-1.5">
+                      Rahul Bera <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">BCA 2nd Year • SVU</span>
+                  </div>
+                </a>
+
+                <div className="hidden md:flex items-center gap-1 lg:gap-2">
+                  {NAV_ITEMS.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => handleNavClick(item.href)}
+                      className={`px-3.5 py-1.5 rounded-full text-xs lg:text-sm font-medium transition-all ${
+                        activeSection === item.id
+                          ? darkMode
+                            ? 'text-sky-400 bg-sky-500/10 border border-sky-500/20 font-semibold'
+                            : 'text-sky-600 bg-sky-50 border border-sky-200 font-semibold'
+                          : darkMode
+                          ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="hidden sm:flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setDarkMode(!darkMode)}
+                    className={`p-2 rounded-full border transition-all ${
+                      darkMode ? 'border-slate-800 bg-slate-800/80 text-slate-300 hover:text-sky-400' : 'border-slate-200 bg-slate-100 text-slate-700 hover:text-sky-600'
+                    }`}
+                  >
+                    <Icon name={darkMode ? 'sun' : 'moon'} className="w-3.5 h-3.5" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setResumeModalOpen(true)}
+                    className="inline-flex items-center gap-1.5 bg-sky-500 hover:bg-sky-600 text-white px-4 py-1.5 rounded-full text-xs font-semibold shadow-md shadow-sky-500/20 transition-all cursor-pointer"
+                  >
+                    <Icon name="fileText" className="w-3.5 h-3.5" />
+                    <span>Download Resume</span>
+                  </button>
+                </div>
+
+                <div className="flex md:hidden items-center gap-2">
+                  <button type="button" onClick={() => setDarkMode(!darkMode)} className="p-1.5 rounded-full border border-slate-800 bg-slate-800 text-slate-300">
+                    <Icon name={darkMode ? 'sun' : 'moon'} className="w-3.5 h-3.5" />
+                  </button>
+                  <button type="button" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-1.5 rounded-full border border-slate-800 bg-slate-800 text-slate-300">
+                    <Icon name={mobileMenuOpen ? 'x' : 'menu'} className="w-4 h-4" />
+                  </button>
+                </div>
+              </nav>
+            </div>
+
+            {mobileMenuOpen && (
+              <div className="max-w-7xl mx-auto mt-2 pointer-events-auto">
+                <div className={`md:hidden border rounded-3xl p-4 space-y-1.5 shadow-2xl ${
+                  darkMode ? 'bg-slate-900/95 backdrop-blur-2xl border-slate-800 text-slate-200' : 'bg-white/95 backdrop-blur-2xl border-slate-200 text-slate-800'
+                }`}>
+                  {NAV_ITEMS.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => handleNavClick(item.href)}
+                      className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-between ${
+                        activeSection === item.id ? 'bg-sky-500/10 text-sky-400 font-semibold border border-sky-500/20' : 'hover:bg-slate-800 text-slate-300'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {activeSection === item.id && <div className="w-1.5 h-1.5 rounded-full bg-sky-400" />}
+                    </button>
+                  ))}
+                  <div className="pt-3 border-t border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => { setMobileMenuOpen(false); setResumeModalOpen(true); }}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-full text-xs font-bold bg-sky-500 hover:bg-sky-600 text-white shadow-md"
+                    >
+                      <Icon name="fileText" className="w-4 h-4" />
+                      <span>Download Resume</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </header>
+
+          <main>
+            {/* HERO SECTION */}
+            <section id="hero" className="relative min-h-[92vh] pt-28 sm:pt-32 pb-16 lg:pb-24 flex items-center overflow-hidden">
+              <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] sm:w-[700px] h-[350px] bg-sky-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                  
+                  {/* Left Hero Card */}
+                  <div className="lg:col-span-7 flex flex-col gap-6">
+                    <div className={`p-6 sm:p-10 rounded-[32px] border relative overflow-hidden transition-all duration-300 flex-1 flex flex-col justify-between ${
+                      darkMode ? 'bg-slate-900/40 border-slate-800 shadow-2xl text-slate-200' : 'bg-white/90 border-slate-200 shadow-xl text-slate-800'
+                    }`}>
+                      <div>
+                        <div className="flex items-center gap-2 mb-4">
+                          <p className="text-sky-400 font-mono text-xs sm:text-sm font-semibold tracking-wider">// Introduction</p>
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span className="text-[11px] font-mono text-slate-400 hidden sm:inline">SVU Barrackpore</span>
+                        </div>
+
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-3 tracking-tight text-white">
+                          Rahul <br className="hidden sm:inline" />
+                          <span className="bg-gradient-to-r from-sky-400 via-sky-300 to-blue-500 bg-clip-text text-transparent">Bera</span>
+                        </h1>
+
+                        <p className="text-slate-300 text-base sm:text-lg font-medium mb-4">
+                          2nd Year BCA Student & Aspiring Web Developer
+                        </p>
+
+                        <p className="text-slate-400 text-sm sm:text-base leading-relaxed mb-6 max-w-xl">
+                          "{PERSONAL_INFO.tagline}"
+                        </p>
+
+                        <div className="flex flex-wrap items-center gap-2.5 mb-8 text-xs text-slate-400">
+                          <div className="flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/60 rounded-full px-3.5 py-1.5">
+                            <Icon name="graduationCap" className="w-3.5 h-3.5 text-sky-400" />
+                            <span>Swami Vivekananda University</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/60 rounded-full px-3.5 py-1.5">
+                            <Icon name="mapPin" className="w-3.5 h-3.5 text-sky-400" />
+                            <span>Barrackpore, Kolkata</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 bg-slate-800/80 border border-slate-700/60 rounded-full px-3.5 py-1.5">
+                            <Icon name="code2" className="w-3.5 h-3.5 text-sky-400" />
+                            <span>Web Development & C++</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4 pt-2">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <a href="#projects" className="inline-flex items-center justify-center gap-2 bg-sky-500 hover:bg-sky-600 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg shadow-sky-500/20 transition-all">
+                            <span>View Projects</span>
+                            <Icon name="arrowRight" className="w-4 h-4" />
+                          </a>
+                          <a href="#contact" className="inline-flex items-center justify-center gap-2 border border-slate-700 hover:bg-slate-800/90 text-slate-200 px-6 py-3 rounded-xl text-sm font-bold transition-colors">
+                            <Icon name="mail" className="w-4 h-4 text-sky-400" />
+                            <span>Contact Me</span>
+                          </a>
+                          <button type="button" onClick={() => setResumeModalOpen(true)} className="inline-flex items-center justify-center gap-2 border border-slate-800 hover:border-slate-700 bg-slate-900/60 text-slate-300 hover:text-white px-4 py-3 rounded-xl text-xs font-semibold transition-all">
+                            <Icon name="fileText" className="w-4 h-4 text-sky-400" />
+                            <span>Resume</span>
+                          </button>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2 border-t border-slate-800/80">
+                          <span className="font-mono text-slate-500 uppercase tracking-wider">Connect:</span>
+                          <a href={PERSONAL_INFO.github} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:text-sky-400 transition-colors">
+                            <Icon name="github" className="w-3.5 h-3.5" />
+                            <span>GitHub</span>
+                          </a>
+                          <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:text-sky-400 transition-colors">
+                            <Icon name="linkedin" className="w-3.5 h-3.5" />
+                            <span>LinkedIn</span>
+                          </a>
+                          <button type="button" onClick={handleCopyEmail} className="flex items-center gap-1.5 hover:text-sky-400 transition-colors">
+                            <Icon name={copiedEmail ? 'check' : 'copy'} className={`w-3.5 h-3.5 ${copiedEmail ? 'text-emerald-400' : ''}`} />
+                            <span className="font-mono">{copiedEmail ? 'Copied!' : PERSONAL_INFO.email}</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className={`p-6 rounded-[32px] border ${darkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white/80 border-slate-200'}`}>
+                      <h3 className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-3 flex items-center gap-2">
+                        <Icon name="sparkles" className="w-3.5 h-3.5 text-sky-400" />
+                        <span>Currently Learning & Mastering</span>
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {CURRENTLY_LEARNING.map((item, idx) => (
+                          <span key={idx} className="bg-slate-800/90 px-3 py-1 rounded-full text-xs text-sky-300 border border-sky-500/20 font-medium">
+                            {item.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Terminal Card */}
+                  <div className="lg:col-span-5 flex flex-col">
+                    <div className="rounded-[32px] border border-slate-800 bg-slate-900/60 text-slate-200 shadow-2xl overflow-hidden flex flex-col flex-1">
+                      <div className="flex items-center justify-between px-5 py-4 bg-slate-950/80 border-b border-slate-800">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 rounded-full bg-rose-500/90" />
+                          <div className="w-3 h-3 rounded-full bg-amber-500/90" />
+                          <div className="w-3 h-3 rounded-full bg-emerald-500/90" />
+                          <span className="ml-2 text-xs font-mono text-slate-400 hidden sm:inline">rahul-bera@svu-workstation:~</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleRunCode}
+                          disabled={isRunning}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-sky-500 hover:bg-sky-600 text-white shadow-md transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          <Icon name="play" className={`w-3 h-3 ${isRunning ? 'animate-spin' : ''}`} />
+                          <span>{isRunning ? 'Running...' : 'Run Code'}</span>
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-1 px-4 py-2 bg-slate-950/40 border-b border-slate-800/80 overflow-x-auto text-xs font-mono">
+                        {['react', 'cpp', 'python', 'styles'].map((tab) => (
+                          <button
+                            key={tab}
+                            onClick={() => { setActiveTab(tab); setConsoleOutput(null); }}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap ${
+                              activeTab === tab ? 'bg-slate-800 text-sky-400 font-semibold border border-slate-700' : 'text-slate-400 hover:text-slate-200'
+                            }`}
+                          >
+                            <span>{tabLabels[tab].icon}</span>
+                            <span>{tabLabels[tab].label}</span>
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="p-5 text-xs sm:text-sm font-mono overflow-x-auto flex-1 max-h-[340px]">
+                        <pre className="text-slate-300 leading-relaxed font-mono">
+                          <code>{CODE_SNIPPETS[activeTab]}</code>
+                        </pre>
+                      </div>
+
+                      {consoleOutput && (
+                        <div className="p-4 bg-slate-950/95 border-t border-sky-500/30 text-xs font-mono text-sky-300 flex items-start gap-2.5 animate-fadeIn">
+                          <Icon name="terminal" className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
+                          <div className="flex-1 break-words">
+                            <span className="text-slate-500 font-bold block mb-0.5">[OUTPUT CONSOLE]</span>
+                            <span>{consoleOutput}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="px-5 py-3 bg-slate-950/80 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-sky-400 inline-block animate-pulse" />
+                          <span>UTF-8 • {tabLabels[activeTab].lang}</span>
+                        </div>
+                        <span>BCA 2nd Year • SVU</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </section>
+
+            {/* ABOUT SECTION */}
+            <section id="about" className="py-20 sm:py-24 relative overflow-hidden">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div className="max-w-3xl mb-12">
+                  <p className="text-sky-400 font-mono text-xs sm:text-sm font-semibold tracking-wider mb-2">// Academic & Developer Story</p>
+                  <h2 className="text-2xl sm:text-3xl font-bold flex items-center gap-3 text-white mb-3">
+                    <span className="w-8 h-[2px] bg-sky-500 shrink-0" />
+                    <span>About Rahul Bera</span>
+                  </h2>
+                  <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                    A genuine student journey focused on practical skill acquisition, clean coding, and meaningful software projects at SVU Barrackpore.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+                  <div className="lg:col-span-7 space-y-6">
+                    <div className={`p-6 sm:p-8 rounded-[32px] border ${darkMode ? 'bg-slate-900/40 border-slate-800 text-slate-200' : 'bg-white border-slate-200 text-slate-800'}`}>
+                      <h3 className="text-xl font-bold mb-4 flex items-center justify-between">
+                        <span>Student Developer Bio</span>
+                        <span className="text-xs font-mono font-medium text-sky-400 px-3 py-1 rounded-full bg-slate-800 border border-sky-500/20">SVU Barrackpore</span>
+                      </h3>
+
+                      <div className="space-y-4 text-slate-300 leading-relaxed text-sm sm:text-base">
+                        <p>
+                          Hello! I'm <strong className="text-white font-semibold">Rahul Bera</strong>, a 2nd-year Bachelor of Computer Applications (BCA) undergraduate at <strong className="text-sky-400">Swami Vivekananda University (SVU), Barrackpore</strong>.
+                        </p>
+                        <p>
+                          Over the past two years of my BCA curriculum and self-study, I have developed a strong foundation in <span className="text-white font-medium">HTML5, CSS3, JavaScript, C++, and Python</span>.
+                        </p>
+                        <p>
+                          I enjoy solving coding problems, architecting responsive layouts, and turning concepts into functional web applications. Whether it's crafting an e-commerce interface, building a student management system, or writing modular C++ algorithms, I care deeply about clean code and good user experience.
+                        </p>
+                      </div>
+
+                      <div className="mt-8 pt-6 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-xl bg-slate-800 text-sky-400 flex items-center justify-center border border-slate-700/60">
+                            <Icon name="graduationCap" className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-xs">Degree</span>
+                            <span className="font-semibold text-slate-200">BCA (2nd Year, 2024-2027)</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-xl bg-slate-800 text-sky-400 flex items-center justify-center border border-slate-700/60">
+                            <Icon name="mapPin" className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-xs">University & City</span>
+                            <span className="font-semibold text-slate-200">SVU Barrackpore, Kolkata</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-xl bg-slate-800 text-sky-400 flex items-center justify-center border border-slate-700/60">
+                            <Icon name="mail" className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-xs">Email</span>
+                            <span className="font-semibold text-slate-200 font-mono">{PERSONAL_INFO.email}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-xl bg-slate-800 text-emerald-400 flex items-center justify-center border border-slate-700/60">
+                            <Icon name="checkCircle2" className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block text-xs">Status</span>
+                            <span className="font-semibold text-emerald-400">Available for Internships</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-5 space-y-6">
+                    <div className={`p-6 sm:p-7 rounded-[32px] border ${darkMode ? 'bg-slate-900/40 border-slate-800' : 'bg-white border-slate-200'}`}>
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold flex items-center gap-2 text-white">
+                          <Icon name="bookOpen" className="w-5 h-5 text-sky-400" />
+                          <span>Currently Learning</span>
+                        </h3>
+                        <span className="text-xs font-mono px-3 py-1 rounded-full bg-slate-800 text-sky-300 border border-sky-500/20">Active Focus</span>
+                      </div>
+
+                      <div className="space-y-3">
+                        {CURRENTLY_LEARNING.map((item, idx) => (
+                          <div key={idx} className="p-4 rounded-2xl border bg-slate-950/60 border-slate-800 text-slate-200">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-bold text-sm text-slate-100">{item.name}</span>
+                              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-sky-300 border border-sky-500/20">{item.tag}</span>
+                            </div>
+                            <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+            {/* SKILLS SECTION */}
+            <section id="skills" className="py-20 sm:py-24 relative overflow-hidden">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div className="max-w-3xl mb-12">
+                  <p className="text-sky-400 font-mono text-xs sm:text-sm font-semibold tracking-wider mb-2">// Technical Capabilities</p>
+                  <h2 className="text-2xl sm:text-3xl font-bold flex items-center gap-3 text-white mb-3">
+                    <span className="w-8 h-[2px] bg-sky-500 shrink-0" />
+                    <span>Technical & Programming Skills</span>
+                  </h2>
+                  <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                    Solid technical competencies developed through coursework at SVU Barrackpore and deliberate personal development projects.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 mb-10">
+                  {[
+                    { id: 'all', label: 'All Capabilities' },
+                    { id: 'frontend', label: 'Frontend Web' },
+                    { id: 'programming', label: 'Programming & Logic' },
+                    { id: 'tools', label: 'Tools & Workflow' },
+                    { id: 'design', label: 'Design & UI' },
+                  ].map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedSkillCategory(cat.id)}
+                      className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all ${
+                        selectedSkillCategory === cat.id
+                          ? 'bg-sky-500 text-white shadow-md shadow-sky-500/20'
+                          : 'bg-slate-900/60 border border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {filteredSkills.map((skill, idx) => (
+                    <div key={idx} className="p-6 rounded-[28px] border bg-slate-900/40 border-slate-800 hover:border-sky-500/40 transition-all flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="w-10 h-10 rounded-2xl bg-slate-800 border border-slate-700/60 flex items-center justify-center text-sky-400">
+                            <Icon name={skill.icon} className="w-5 h-5" />
+                          </div>
+                          <span className="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-slate-800 text-sky-300 border border-sky-500/20">
+                            {skill.experienceLabel}
+                          </span>
+                        </div>
+                        <h3 className="text-base font-bold text-slate-100 mb-2">{skill.name}</h3>
+                        <p className="text-xs text-slate-400 leading-relaxed mb-4">{skill.description}</p>
+                      </div>
+
+                      <div className="pt-4 border-t border-slate-800">
+                        <div className="flex justify-between items-center text-xs font-mono text-slate-400 mb-1.5">
+                          <span>Proficiency</span>
+                          <span className="text-sky-400 font-bold">{skill.level}%</span>
+                        </div>
+                        <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                          <div className="h-full bg-sky-500 rounded-full" style={{ width: `${skill.level}%` }} />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+            </section>
+
+            {/* PROJECTS SECTION */}
+            <section id="projects" className="py-20 sm:py-24 relative overflow-hidden">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div className="max-w-3xl mb-12">
+                  <p className="text-sky-400 font-mono text-xs sm:text-sm font-semibold tracking-wider mb-2">// Featured Projects & Code</p>
+                  <h2 className="text-2xl sm:text-3xl font-bold flex items-center gap-3 text-white mb-3">
+                    <span className="w-8 h-[2px] bg-sky-500 shrink-0" />
+                    <span>Projects & Software Builds</span>
+                  </h2>
+                  <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                    Practical software projects demonstrating responsive web engineering, OOP with C++, data analysis, and student-led development at SVU Barrackpore.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 mb-10">
+                  {[
+                    { id: 'all', label: 'All Builds' },
+                    { id: 'web', label: 'Web Applications' },
+                    { id: 'cpp', label: 'C++ Systems' },
+                    { id: 'data', label: 'Data Analysis' },
+                  ].map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedProjectCategory(cat.id)}
+                      className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all ${
+                        selectedProjectCategory === cat.id
+                          ? 'bg-sky-500 text-white shadow-md shadow-sky-500/20'
+                          : 'bg-slate-900/60 border border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                  {filteredProjects.map((project) => (
+                    <div key={project.id} className="rounded-[28px] border bg-slate-900/40 border-slate-800 hover:border-sky-500/40 transition-all flex flex-col justify-between overflow-hidden">
+                      <div className="p-6 bg-slate-950/80 border-b border-slate-800">
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <span className="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-slate-800 text-sky-300 border border-sky-500/20">
+                            {project.categoryLabel}
+                          </span>
+                          {project.badge && (
+                            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-800 text-sky-400 border border-slate-700">
+                              {project.badge}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="text-xl font-bold tracking-tight text-slate-100 hover:text-sky-400 transition-colors">
+                          {project.title}
+                        </h3>
+                        <p className="text-xs text-slate-400 mt-1 font-medium">{project.subtitle}</p>
+                      </div>
+
+                      <div className="p-6 flex-1 flex flex-col justify-between space-y-5">
+                        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed line-clamp-3">
+                          {project.description}
+                        </p>
+
+                        <div className="pt-4 border-t border-slate-800">
+                          <div className="flex flex-wrap gap-1.5 mb-4">
+                            {project.technologies.slice(0, 4).map((tech, idx) => (
+                              <span key={idx} className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800/90 text-sky-300 border border-sky-500/20">
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 pt-2">
+                            <button
+                              type="button"
+                              onClick={() => { setActiveProjectModal(project); setProjectModalTab('overview'); setSimOutput(''); }}
+                              className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-400 hover:text-sky-300 transition-colors cursor-pointer"
+                            >
+                              <Icon name="eye" className="w-3.5 h-3.5" />
+                              <span>Details & Code</span>
+                            </button>
+
+                            <div className="flex items-center gap-2">
+                              <a href={project.githubUrl} target="_blank" rel="noreferrer" className="p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white transition-colors" title="GitHub Repository">
+                                <Icon name="github" className="w-4 h-4" />
+                              </a>
+                              <button
+                                type="button"
+                                onClick={() => { setActiveProjectModal(project); setProjectModalTab('simulator'); setSimOutput(''); }}
+                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold bg-sky-500 hover:bg-sky-600 text-white shadow-sm transition-all"
+                              >
+                                <span>Demo</span>
+                                <Icon name="arrowUpRight" className="w-3 h-3" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* GitHub Banner */}
+                <div className="mt-14 p-6 sm:p-8 rounded-[32px] border bg-slate-900/40 border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center text-sky-400 border border-slate-700/60 shrink-0">
+                      <Icon name="folderGit2" className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-base sm:text-lg text-slate-100">Explore More Practice Repositories on GitHub</h4>
+                      <p className="text-xs sm:text-sm text-slate-400">Check out algorithm practice repositories, mini frontend templates, and college lab assignments.</p>
+                    </div>
+                  </div>
+                  <a href="https://github.com/rahulbera-dev" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-colors shrink-0">
+                    <Icon name="github" className="w-4 h-4" />
+                    <span>Visit @rahulbera-dev</span>
+                  </a>
+                </div>
+
+              </div>
+            </section>
+
+            {/* EDUCATION SECTION */}
+            <section id="education" className="py-20 sm:py-24 relative overflow-hidden">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div className="max-w-3xl mb-12">
+                  <p className="text-sky-400 font-mono text-xs sm:text-sm font-semibold tracking-wider mb-2">// Academic Pathway</p>
+                  <h2 className="text-2xl sm:text-3xl font-bold flex items-center gap-3 text-white mb-3">
+                    <span className="w-8 h-[2px] bg-sky-500 shrink-0" />
+                    <span>Education & Academic Foundations</span>
+                  </h2>
+                  <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                    Undergraduate degree coursework and foundational computing training at Swami Vivekananda University (SVU), Barrackpore.
+                  </p>
+                </div>
+
+                <div className="max-w-4xl mx-auto relative">
+                  <div className="absolute left-4 sm:left-1/2 top-4 bottom-4 w-0.5 bg-gradient-to-b from-sky-500 via-blue-500 to-slate-800 -translate-x-1/2 hidden sm:block" />
+
+                  <div className="space-y-12">
+                    {EDUCATION_DATA.map((item, idx) => (
+                      <div key={idx} className={`relative flex flex-col sm:flex-row items-center ${idx % 2 === 0 ? 'sm:flex-row-reverse' : ''} gap-8 group`}>
+                        <div className="hidden sm:flex absolute left-1/2 top-6 -translate-x-1/2 w-10 h-10 rounded-full bg-slate-950 border-2 border-sky-400 items-center justify-center text-sky-400 shadow-lg shadow-sky-500/20 z-10">
+                          <Icon name="graduationCap" className="w-5 h-5" />
+                        </div>
+
+                        <div className="w-full sm:w-1/2">
+                          <div className="p-6 sm:p-7 rounded-[28px] border bg-slate-900/40 border-slate-800 hover:border-sky-500/30 transition-all">
+                            <div className="flex items-center justify-between gap-2 mb-3">
+                              <span className="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-slate-800 text-sky-300 border border-sky-500/20">
+                                {item.status}
+                              </span>
+                              <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
+                                <Icon name="calendar" className="w-3.5 h-3.5" />
+                                <span>{item.period}</span>
+                              </div>
+                            </div>
+
+                            <h3 className="text-lg sm:text-xl font-bold text-slate-100 mb-1">{item.degree}</h3>
+                            <div className="flex items-center gap-1.5 text-sm font-semibold text-sky-400 mb-3">
+                              <Icon name="mapPin" className="w-4 h-4" />
+                              <span>{item.institution}, {item.location}</span>
+                            </div>
+
+                            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">{item.description}</p>
+
+                            <div className="space-y-2 mb-5">
+                              {item.highlights.map((h, hIdx) => (
+                                <div key={hIdx} className="flex items-start gap-2 text-xs text-slate-400">
+                                  <Icon name="checkCircle2" className="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5" />
+                                  <span>{h}</span>
+                                </div>
+                              ))}
+                            </div>
+
+                            <div>
+                              <span className="text-[11px] uppercase tracking-wider font-semibold text-slate-500 block mb-2 font-mono">Key Coursework</span>
+                              <div className="flex flex-wrap gap-1.5">
+                                {item.coursework.map((course, cIdx) => (
+                                  <span key={cIdx} className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-slate-800/90 text-sky-300 border border-sky-500/20">
+                                    {course}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+            {/* LEARNING / ACHIEVEMENTS SECTION */}
+            <section id="learning" className="py-20 sm:py-24 relative overflow-hidden">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div className="max-w-3xl mb-12">
+                  <p className="text-sky-400 font-mono text-xs sm:text-sm font-semibold tracking-wider mb-2">// Continuous Progress & Milestones</p>
+                  <h2 className="text-2xl sm:text-3xl font-bold flex items-center gap-3 text-white mb-3">
+                    <span className="w-8 h-[2px] bg-sky-500 shrink-0" />
+                    <span>Learning Milestones & Coding Practice</span>
+                  </h2>
+                  <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                    Real, verifiable development habits and academic milestones achieved through daily discipline and curiosity at SVU Barrackpore.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {LEARNING_ACHIEVEMENTS.map((item, idx) => (
+                    <div key={idx} className="p-6 rounded-[28px] border bg-slate-900/40 border-slate-800 hover:border-sky-500/40 transition-all flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-4">
+                          <div className="w-10 h-10 rounded-2xl bg-slate-800 border border-slate-700/60 flex items-center justify-center text-sky-400">
+                            <Icon name={item.icon} className="w-5 h-5" />
+                          </div>
+                          <span className="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-slate-800 text-sky-300 border border-sky-500/20">
+                            {item.metric}
+                          </span>
+                        </div>
+                        <div className="text-xs font-mono text-slate-500 uppercase tracking-wider mb-1">{item.category}</div>
+                        <h3 className="text-base sm:text-lg font-bold text-slate-100 mb-2 hover:text-sky-400 transition-colors">{item.title}</h3>
+                        <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{item.description}</p>
+                      </div>
+
+                      <div className="mt-5 pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500 font-mono">
+                        <span className="flex items-center gap-1.5">
+                          <Icon name="clock" className="w-3.5 h-3.5 text-sky-400" />
+                          <span>{item.date}</span>
+                        </span>
+                        <span className="text-sky-400">Verified Routine</span>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Focus Card */}
+                  <div className="p-6 rounded-[28px] border bg-slate-900/40 border-slate-800 flex flex-col justify-between">
+                    <div>
+                      <div className="w-10 h-10 rounded-2xl bg-slate-800 border border-slate-700/60 text-sky-400 flex items-center justify-center mb-4">
+                        <Icon name="flame" className="w-5 h-5" />
+                      </div>
+                      <div className="text-xs font-mono text-sky-400 uppercase tracking-wider mb-1">Student Routine</div>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-100 mb-2">Daily Coding Commitment</h3>
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        Combining <strong className="text-white">SVU BCA coursework</strong> with 2–3 hours of hands-on frontend experimentation, data structures problem solving, and GitHub project commits daily.
+                      </p>
+                    </div>
+                    <div className="mt-5 pt-3 border-t border-slate-800 text-xs font-mono text-sky-300 flex items-center gap-1.5">
+                      <Icon name="checkCircle2" className="w-4 h-4 text-emerald-400" />
+                      <span>Dedicated to continuous growth</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+
+            {/* CONTACT SECTION */}
+            <section id="contact" className="py-20 sm:py-24 relative overflow-hidden">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div className="max-w-3xl mb-12">
+                  <p className="text-sky-400 font-mono text-xs sm:text-sm font-semibold tracking-wider mb-2">// Communication & Connect</p>
+                  <h2 className="text-2xl sm:text-3xl font-bold flex items-center gap-3 text-white mb-3">
+                    <span className="w-8 h-[2px] bg-sky-500 shrink-0" />
+                    <span>Let's Connect & Build Together</span>
+                  </h2>
+                  <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                    Have an internship opening, freelance web inquiry, college collaboration, or just want to talk software engineering? Drop a direct message!
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  {/* Left Column info */}
+                  <div className="lg:col-span-5 space-y-6">
+                    <div className="p-6 sm:p-8 rounded-[32px] border bg-slate-900/40 border-slate-800">
+                      <h3 className="text-lg sm:text-xl font-bold mb-2 text-slate-100">Contact Details</h3>
+                      <p className="text-xs sm:text-sm text-slate-400 mb-6 leading-relaxed">
+                        Feel free to email me directly or connect across developer platforms. I usually respond within 24 hours.
+                      </p>
+
+                      <div className="space-y-3">
+                        <div className="p-4 rounded-2xl border bg-slate-950/60 border-slate-800 flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3 overflow-hidden">
+                            <div className="w-10 h-10 rounded-2xl bg-slate-800 border border-slate-700/60 text-sky-400 flex items-center justify-center shrink-0">
+                              <Icon name="mail" className="w-5 h-5" />
+                            </div>
+                            <div className="overflow-hidden">
+                              <span className="text-[11px] text-slate-400 block font-mono">Email Address</span>
+                              <a href={`mailto:${PERSONAL_INFO.email}`} className="text-xs sm:text-sm font-semibold text-slate-200 hover:text-sky-400 transition-colors truncate block">
+                                {PERSONAL_INFO.email}
+                              </a>
+                            </div>
+                          </div>
+                          <button type="button" onClick={handleCopyEmail} className="p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white transition-colors shrink-0">
+                            <Icon name={copiedEmail ? 'check' : 'copy'} className={`w-4 h-4 ${copiedEmail ? 'text-emerald-400' : ''}`} />
+                          </button>
+                        </div>
+
+                        <div className="p-4 rounded-2xl border bg-slate-950/60 border-slate-800 flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-2xl bg-slate-800 border border-slate-700/60 text-sky-400 flex items-center justify-center shrink-0">
+                            <Icon name="mapPin" className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <span className="text-[11px] text-slate-400 block font-mono">Location</span>
+                            <span className="text-xs sm:text-sm font-semibold text-slate-200">{PERSONAL_INFO.location}</span>
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-2xl border bg-slate-950/60 border-slate-800 flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-2xl bg-slate-800 border border-slate-700/60 text-emerald-400 flex items-center justify-center shrink-0">
+                            <Icon name="clock" className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <span className="text-[11px] text-slate-400 block font-mono">Current Status</span>
+                            <span className="text-xs sm:text-sm font-semibold text-emerald-400">{PERSONAL_INFO.availability}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-8 pt-6 border-t border-slate-800">
+                        <span className="text-xs uppercase tracking-wider font-semibold text-slate-400 block mb-3 font-mono">Developer Profiles</span>
+                        <div className="grid grid-cols-3 gap-2.5">
+                          <a href={PERSONAL_INFO.github} target="_blank" rel="noreferrer" className="p-3 rounded-2xl border border-slate-800 bg-slate-950/60 hover:border-sky-500/40 hover:text-sky-400 flex flex-col items-center justify-center gap-1.5 transition-all text-xs text-slate-300">
+                            <Icon name="github" className="w-5 h-5 text-slate-400" />
+                            <span className="font-mono text-[11px]">GitHub</span>
+                          </a>
+                          <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noreferrer" className="p-3 rounded-2xl border border-slate-800 bg-slate-950/60 hover:border-sky-500/40 hover:text-sky-400 flex flex-col items-center justify-center gap-1.5 transition-all text-xs text-slate-300">
+                            <Icon name="linkedin" className="w-5 h-5 text-slate-400" />
+                            <span className="font-mono text-[11px]">LinkedIn</span>
+                          </a>
+                          <a href={PERSONAL_INFO.instagram} target="_blank" rel="noreferrer" className="p-3 rounded-2xl border border-slate-800 bg-slate-950/60 hover:border-sky-500/40 hover:text-sky-400 flex flex-col items-center justify-center gap-1.5 transition-all text-xs text-slate-300">
+                            <Icon name="instagram" className="w-5 h-5 text-slate-400" />
+                            <span className="font-mono text-[11px]">Instagram</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column form */}
+                  <div className="lg:col-span-7">
+                    <div className="p-6 sm:p-8 rounded-[32px] border bg-slate-900/40 border-slate-800">
+                      <h3 className="text-xl font-bold mb-2 text-slate-100">Send a Direct Message</h3>
+                      <p className="text-xs sm:text-sm text-slate-400 mb-6">Fill out the form below and I'll get back to you promptly.</p>
+
+                      {contactSuccess && (
+                        <div className="mb-6 p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 flex items-start gap-3 animate-fadeIn">
+                          <Icon name="checkCircle2" className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                          <div className="text-xs sm:text-sm">
+                            <strong className="block font-semibold">Message sent successfully!</strong>
+                            <span>Thank you for reaching out, Rahul Bera will review your message soon.</span>
+                          </div>
+                        </div>
+                      )}
+
+                      <form onSubmit={handleContactSubmit} className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="block text-xs font-semibold text-slate-300">Your Name <span className="text-rose-400">*</span></label>
+                            <input
+                              type="text"
+                              value={contactForm.name}
+                              onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                              placeholder="e.g. Alex Sharma"
+                              className="w-full px-4 py-3 rounded-2xl border text-sm bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                            />
+                            {contactErrors.name && <span className="text-xs text-rose-400">{contactErrors.name}</span>}
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <label className="block text-xs font-semibold text-slate-300">Your Email <span className="text-rose-400">*</span></label>
+                            <input
+                              type="email"
+                              value={contactForm.email}
+                              onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                              placeholder="alex@company.com"
+                              className="w-full px-4 py-3 rounded-2xl border text-sm bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                            />
+                            {contactErrors.email && <span className="text-xs text-rose-400">{contactErrors.email}</span>}
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="block text-xs font-semibold text-slate-300">Subject / Topic <span className="text-rose-400">*</span></label>
+                          <input
+                            type="text"
+                            value={contactForm.subject}
+                            onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
+                            placeholder="Frontend Internship Opportunity / Collaboration"
+                            className="w-full px-4 py-3 rounded-2xl border text-sm bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                          />
+                          {contactErrors.subject && <span className="text-xs text-rose-400">{contactErrors.subject}</span>}
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="block text-xs font-semibold text-slate-300">Message <span className="text-rose-400">*</span></label>
+                          <textarea
+                            rows="4"
+                            value={contactForm.message}
+                            onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                            placeholder="Hi Rahul, I came across your portfolio and would like to discuss..."
+                            className="w-full px-4 py-3 rounded-2xl border text-sm bg-slate-950/80 border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-y"
+                          />
+                          {contactErrors.message && <span className="text-xs text-rose-400">{contactErrors.message}</span>}
+                        </div>
+
+                        <button
+                          type="submit"
+                          disabled={contactSubmitting}
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full font-bold text-sm bg-sky-500 hover:bg-sky-600 text-white shadow-lg shadow-sky-500/20 transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          <Icon name="send" className={`w-4 h-4 ${contactSubmitting ? 'animate-spin' : ''}`} />
+                          <span>{contactSubmitting ? 'Sending Message...' : 'Send Message'}</span>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+          </main>
+
+          {/* FOOTER */}
+          <footer className="border-t border-slate-800/80 bg-slate-950 text-slate-400 py-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center pb-8 border-b border-slate-900">
+                <div className="md:col-span-5 space-y-2">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center font-mono font-bold text-white text-xs shadow-sm shadow-sky-500/30">
+                      RB
+                    </div>
+                    <span className="font-bold text-lg text-white tracking-tight">Rahul Bera</span>
+                  </div>
+                  <p className="text-xs text-slate-400 max-w-sm">
+                    2nd Year BCA Student at Swami Vivekananda University (SVU), Barrackpore. Aspiring Web Developer & Software Engineer.
+                  </p>
+                </div>
+
+                <div className="md:col-span-4 flex flex-wrap gap-x-6 gap-y-2 text-xs font-medium">
+                  {NAV_ITEMS.map((item) => (
+                    <button key={item.id} onClick={() => handleNavClick(item.href)} className="hover:text-sky-400 transition-colors">
+                      {item.label}
+                    </button>
+                  ))}
+                  <button onClick={() => setResumeModalOpen(true)} className="text-sky-400 hover:underline font-semibold">
+                    Resume
+                  </button>
+                </div>
+
+                <div className="md:col-span-3 flex items-center justify-start md:justify-end gap-2.5">
+                  <a href={PERSONAL_INFO.github} target="_blank" rel="noreferrer" className="p-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-sky-400 hover:border-sky-500/40 transition-all">
+                    <Icon name="github" className="w-4 h-4" />
+                  </a>
+                  <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noreferrer" className="p-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-sky-400 hover:border-sky-500/40 transition-all">
+                    <Icon name="linkedin" className="w-4 h-4" />
+                  </a>
+                  <a href={PERSONAL_INFO.instagram} target="_blank" rel="noreferrer" className="p-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-sky-400 hover:border-sky-500/40 transition-all">
+                    <Icon name="instagram" className="w-4 h-4" />
+                  </a>
+                  <a href={`mailto:${PERSONAL_INFO.email}`} className="p-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-sky-400 hover:border-sky-500/40 transition-all">
+                    <Icon name="mail" className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 text-center sm:text-left">
+                <div>© 2026 Rahul Bera. Built with React & modern web engineering.</div>
+                <div className="flex items-center gap-2 font-mono">
+                  <span>SVU Barrackpore • BCA 2nd Year</span>
+                </div>
+              </div>
+            </div>
+          </footer>
+
+          {/* BACK TO TOP BUTTON */}
+          {showBackToTop && (
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="fixed bottom-6 right-6 z-40 p-3.5 rounded-full bg-sky-500 text-white shadow-lg shadow-sky-500/30 hover:bg-sky-600 hover:scale-110 transition-all border border-sky-400/40 animate-fadeIn"
+            >
+              <Icon name="arrowUp" className="w-5 h-5" />
+            </button>
+          )}
+
+          {/* PROJECT DETAIL MODAL */}
+          {activeProjectModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn" onClick={() => setActiveProjectModal(null)}>
+              <div className="w-full max-w-3xl max-h-[90vh] flex flex-col rounded-[32px] border shadow-2xl overflow-hidden bg-slate-900 border-slate-800 text-slate-100 animate-scaleUp" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between p-5 sm:p-6 border-b border-slate-800/80 bg-slate-950/60">
+                  <div>
+                    <span className="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-slate-800 text-sky-300 border border-sky-500/20">
+                      {activeProjectModal.categoryLabel}
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-100 mt-1">
+                      {activeProjectModal.title}
+                    </h3>
+                  </div>
+                  <button onClick={() => setActiveProjectModal(null)} className="p-2 rounded-full border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                    <Icon name="x" className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2 px-6 pt-3 border-b border-slate-800/80 bg-slate-950/30 text-xs sm:text-sm font-medium">
+                  {['overview', 'features', 'code', 'simulator'].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setProjectModalTab(tab)}
+                      className={`pb-3 px-2 border-b-2 font-semibold capitalize transition-colors ${
+                        projectModalTab === tab ? 'border-sky-400 text-sky-400' : 'border-transparent text-slate-400 hover:text-slate-200'
+                      }`}
+                    >
+                      {tab === 'features' ? `Key Highlights (${activeProjectModal.features.length})` : tab}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="p-6 sm:p-8 overflow-y-auto flex-1 text-sm space-y-6">
+                  {projectModalTab === 'overview' && (
+                    <div className="space-y-5">
+                      <div>
+                        <h4 className="text-xs uppercase tracking-wider font-semibold text-slate-400 mb-2 font-mono">// Project Description</h4>
+                        <p className="text-slate-300 leading-relaxed">{activeProjectModal.description}</p>
+                      </div>
+                      <div>
+                        <h4 className="text-xs uppercase tracking-wider font-semibold text-slate-400 mb-2.5 font-mono">// Technologies Used</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {activeProjectModal.technologies.map((t, idx) => (
+                            <span key={idx} className="px-3 py-1 rounded-full text-xs font-mono bg-slate-800 text-sky-300 border border-sky-500/20">{t}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {projectModalTab === 'features' && (
+                    <div className="space-y-3">
+                      {activeProjectModal.features.map((feat, idx) => (
+                        <div key={idx} className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-950/50 border border-slate-800/80">
+                          <Icon name="checkCircle2" className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                          <span className="text-xs sm:text-sm text-slate-300">{feat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {projectModalTab === 'code' && activeProjectModal.codeSnippet && (
+                    <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs sm:text-sm font-mono overflow-x-auto">
+                      <pre className="text-sky-300"><code>{activeProjectModal.codeSnippet.code}</code></pre>
+                    </div>
+                  )}
+
+                  {projectModalTab === 'simulator' && (
+                    <div className="space-y-4">
+                      <p className="text-xs sm:text-sm text-slate-400">Run browser-based execution routine for <strong className="text-white">{activeProjectModal.title}</strong>:</p>
+                      <button
+                        type="button"
+                        onClick={() => setSimOutput(`✓ Executed [${activeProjectModal.title}] module with 0 memory faults at ${new Date().toLocaleTimeString()}.`)}
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold bg-sky-500 hover:bg-sky-600 text-white shadow-sm transition-all"
+                      >
+                        <Icon name="play" className="w-4 h-4" />
+                        <span>Simulate Execution</span>
+                      </button>
+                      {simOutput && (
+                        <div className="p-4 rounded-2xl bg-slate-950 border border-sky-500/30 text-xs font-mono text-sky-300 animate-fadeIn">
+                          {simOutput}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-5 sm:p-6 border-t border-slate-800/80 bg-slate-950/60 flex items-center justify-between">
+                  <span className="text-xs text-slate-500 font-mono">BCA Academic Project • SVU</span>
+                  <a href={activeProjectModal.githubUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors">
+                    <Icon name="github" className="w-4 h-4" />
+                    <span>GitHub Code</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* RESUME VIEWER MODAL */}
+          {resumeModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn" onClick={() => setResumeModalOpen(false)}>
+              <div className="w-full max-w-4xl max-h-[92vh] flex flex-col rounded-[32px] border shadow-2xl overflow-hidden bg-slate-900 border-slate-800 text-slate-100 animate-scaleUp" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/80 bg-slate-950/60">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-sky-400" />
+                    <span className="font-mono text-xs font-semibold text-slate-300">Rahul_Bera_Resume_BCA2026.pdf</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button type="button" onClick={() => window.print()} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-sky-500 hover:bg-sky-600 text-white shadow-sm transition-all">
+                      <Icon name="printer" className="w-3.5 h-3.5" />
+                      <span>Print / PDF</span>
+                    </button>
+                    <button onClick={() => setResumeModalOpen(false)} className="p-2 rounded-full border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                      <Icon name="x" className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-6 sm:p-10 overflow-y-auto flex-1 bg-slate-950 text-slate-200 font-sans space-y-8">
+                  <div className="border-b border-slate-800 pb-6 space-y-2">
+                    <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{PERSONAL_INFO.name}</h1>
+                    <p className="text-sm sm:text-base text-sky-400 font-medium">{PERSONAL_INFO.role}</p>
+                    <div className="text-xs space-y-1 font-mono text-slate-400">
+                      <div>Email: {PERSONAL_INFO.email} | Location: {PERSONAL_INFO.location}</div>
+                      <div>GitHub: github.com/rahulbera-dev</div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <h2 className="text-xs uppercase tracking-wider font-bold text-sky-400 border-b border-slate-800/80 pb-1 font-mono">// Professional Summary</h2>
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                      Motivated 2nd-year Bachelor of Computer Applications (BCA) student at Swami Vivekananda University, Barrackpore, with proven skills in HTML, CSS, JavaScript, C++, and Python. Actively seeking a software engineering or frontend development internship.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h2 className="text-xs uppercase tracking-wider font-bold text-sky-400 border-b border-slate-800/80 pb-1 font-mono">// Education</h2>
+                    {EDUCATION_DATA.map((edu, idx) => (
+                      <div key={idx} className="space-y-1">
+                        <div className="flex justify-between items-baseline">
+                          <span className="font-bold text-sm text-white">{edu.degree}</span>
+                          <span className="text-xs font-mono text-slate-400">{edu.period}</span>
+                        </div>
+                        <div className="text-xs text-sky-400 font-semibold">{edu.institution}, {edu.location}</div>
+                        <p className="text-xs text-slate-300 leading-relaxed">{edu.description}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3">
+                    <h2 className="text-xs uppercase tracking-wider font-bold text-sky-400 border-b border-slate-800/80 pb-1 font-mono">// Technical Skills</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div><strong className="text-slate-100 block mb-1">Languages:</strong> C++, Python, JavaScript (ES6+), HTML5, CSS3</div>
+                      <div><strong className="text-slate-100 block mb-1">Frameworks & Tools:</strong> React.js, Tailwind CSS, Git, GitHub, VS Code</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 border-t border-slate-800/80 bg-slate-950/60 flex items-center justify-between text-xs text-slate-400">
+                  <span>Ready for 2026 opportunities</span>
+                  <button onClick={() => setResumeModalOpen(false)} className="px-5 py-2 rounded-full bg-slate-800 text-slate-200 hover:text-white border border-slate-700 transition-colors font-semibold">
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
+      );
+    }
+
+    // Render the React application
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
